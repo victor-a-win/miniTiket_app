@@ -1,11 +1,8 @@
-import Image from "next/image";
+import EODashboard from "@/pages/EO_dashboard";
 
 export default function Home() {
   return (
-    <div>
-      <div>
-        <h1>Ini Landing Page</h1>
-      </div>
-    </div>
-  );
+    
+    <EODashboard />
+  )
 }
