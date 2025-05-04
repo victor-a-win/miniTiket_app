@@ -3,4 +3,6 @@ export interface IRegister {
   password: string;
   firstName: string;
   lastName: string;
+  roleId: number;
+  referred_by: string;
 }

@@ -14,7 +14,7 @@ type Event = {
   description: string;
 };
 
-export default function Home() {
+export default function SearchBar() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");

@@ -13,6 +13,8 @@ export default function Register() {
     password: "",
     firstName: "",
     lastName: "",
+    roleId: 1, // Add an appropriate default value for roleId
+    referred_by: "",
   };
 
   const onLogin = async (values: IRegister) => {
@@ -24,6 +26,8 @@ export default function Register() {
           password: values.password,
           first_name: values.firstName,
           last_name: values.lastName,
+          roleI_d: values.roleId,
+          referred_by: values.referred_by
         }
       );
 
@@ -45,7 +49,7 @@ export default function Register() {
 
   return (
     <div className="flex flex-col justify-center justify-items-center items-center gap-5">
-      <p className="text-4xl">LOGIN FORM</p>
+      <p className="text-4xl">REGISTER FORM</p>
       <Formik
         initialValues={initialValues}
         validationSchema={RegisterSchema}
@@ -104,6 +108,30 @@ export default function Register() {
                 />
                 {touched.lastName && errors.lastName ? (
                   <div className="text-red-500">*{errors.lastName}</div>
+                ) : null}
+              </div>
+              <div className="flex flex-col gap-4">
+                <label>Role ID :</label>
+                <Field
+                  type="roleId"
+                  name="roleId"
+                  onChange={handleChange}
+                  value={values.roleId}
+                />
+                {touched.roleId && errors.roleId ? (
+                  <div className="text-red-500">*{errors.roleId}</div>
+                ) : null}
+              </div>
+              <div className="flex flex-col gap-4">
+                <label>Referred by :</label>
+                <Field
+                  type="referred_by"
+                  name="referred_by"
+                  onChange={handleChange}
+                  value={values.referred_by}
+                />
+                {touched.referred_by && errors.referred_by ? (
+                  <div className="text-red-500">*{errors.referred_by}</div>
                 ) : null}
               </div>
               <button className="standard-button" type="submit">

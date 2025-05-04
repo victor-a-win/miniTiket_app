@@ -13,4 +13,6 @@ export const RegisterSchema = Yup.object().shape({
     .required("Password cannot be empty"),
   firstName: Yup.string().required("cannot be empty"),
   lastName: Yup.string().required("cannot be empty"),
+  roleId: Yup.number(),
+  referred_by: Yup.string()
 });

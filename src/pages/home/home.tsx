@@ -1,4 +1,5 @@
 // pages/Home.tsx
+"use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -15,7 +16,7 @@ type Event = {
   user: { first_name: string; last_name: string };
 };
 
-export default function Home() {
+export default function HomeView() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
