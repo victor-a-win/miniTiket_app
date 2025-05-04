@@ -1,8 +1,14 @@
 import EODashboard from "@/pages/EO_dashboard";
+import Home from "@/pages/home/home"
 
 export default function Home() {
   return (
-    
-    <EODashboard />
+    <div>
+      <Home />
+    </div>
+    <div>
+      <EODashboard />
+    </div>
+
   )
 }
