@@ -1,4 +1,5 @@
 // pages/index.tsx
+"use client";
 import { useState, useEffect } from "react";
 import { fetchEvents } from "../../lib/api";
 import EventCard from "../../components/EventCard";

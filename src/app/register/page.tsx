@@ -13,11 +13,11 @@ export default function Register() {
     password: "",
     firstName: "",
     lastName: "",
-    roleId: 1, // Add an appropriate default value for roleId
+    roleId: 1 as number, // Default to role 1
     referred_by: "",
   };
 
-  const onLogin = async (values: IRegister) => {
+  const onRegister = async (values: IRegister) => {
     try {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/register`,
@@ -26,7 +26,7 @@ export default function Register() {
           password: values.password,
           first_name: values.firstName,
           last_name: values.lastName,
-          roleI_d: values.roleId,
+          roleId: Number(values.roleId),
           referred_by: values.referred_by
         }
       );
@@ -40,7 +40,7 @@ export default function Register() {
     } catch (err: any) {
       Swal.fire({
         title: "Error!",
-        text: err.message,
+        text: err.response?.data?.message || err.message,
         icon: "error",
         confirmButtonText: "Cool",
       });
@@ -54,88 +54,107 @@ export default function Register() {
         initialValues={initialValues}
         validationSchema={RegisterSchema}
         onSubmit={(values) => {
-          onLogin(values);
+          onRegister(values);
         }}
       >
         {(props: FormikProps<IRegister>) => {
           const { values, handleChange, touched, errors } = props;
 
           return (
-            <Form>
-              <div className="flex flex-col gap-4">
+            <Form className="w-full max-w-md">
+              <div className="flex flex-col gap-4 mb-4">
                 <label>Email :</label>
                 <Field
                   type="email"
                   name="email"
                   onChange={handleChange}
                   value={values.email}
+                  className="p-2 border rounded"
                 />
                 {touched.email && errors.email ? (
                   <div className="text-red-500">*{errors.email}</div>
                 ) : null}
               </div>
-              <div className="flex flex-col gap-4">
+
+              <div className="flex flex-col gap-4 mb-4">
                 <label>Password :</label>
                 <Field
                   type="password"
                   name="password"
                   onChange={handleChange}
                   value={values.password}
+                  className="p-2 border rounded"
                 />
                 {touched.password && errors.password ? (
                   <div className="text-red-500">*{errors.password}</div>
                 ) : null}
               </div>
-              <div className="flex flex-col gap-4">
+
+              <div className="flex flex-col gap-4 mb-4">
                 <label>First Name :</label>
                 <Field
-                  type="firstName"
+                  type="text"
                   name="firstName"
                   onChange={handleChange}
                   value={values.firstName}
+                  className="p-2 border rounded"
                 />
                 {touched.firstName && errors.firstName ? (
                   <div className="text-red-500">*{errors.firstName}</div>
                 ) : null}
               </div>
-              <div className="flex flex-col gap-4">
+
+              <div className="flex flex-col gap-4 mb-4">
                 <label>Last Name :</label>
                 <Field
-                  type="lastName"
+                  type="text"
                   name="lastName"
                   onChange={handleChange}
                   value={values.lastName}
+                  className="p-2 border rounded"
                 />
                 {touched.lastName && errors.lastName ? (
                   <div className="text-red-500">*{errors.lastName}</div>
                 ) : null}
               </div>
-              <div className="flex flex-col gap-4">
-                <label>Role ID :</label>
+
+              <div className="flex flex-col gap-4 mb-4">
+                <label>Role :</label>
                 <Field
-                  type="roleId"
+                  as="select"
                   name="roleId"
                   onChange={handleChange}
                   value={values.roleId}
-                />
+                  className="p-2 border rounded"
+                >
+                  <option value={1}>Role 1 (Customer)</option>
+                  <option value={2}>Role 2 (Event Organizer)</option>
+                </Field>
                 {touched.roleId && errors.roleId ? (
                   <div className="text-red-500">*{errors.roleId}</div>
                 ) : null}
               </div>
-              <div className="flex flex-col gap-4">
-                <label>Referred by :</label>
+
+              <div className="flex flex-col gap-4 mb-4">
+                <label>Referred by (optional) :</label>
                 <Field
-                  type="referred_by"
+                  type="text"
                   name="referred_by"
                   onChange={handleChange}
                   value={values.referred_by}
+                  className="p-2 border rounded"
                 />
                 {touched.referred_by && errors.referred_by ? (
                   <div className="text-red-500">*{errors.referred_by}</div>
                 ) : null}
               </div>
-              <button className="standard-button" type="submit">
-                Submit
+              
+              <button
+                className="w-full bg-sky-500 text-white py-2 px-4 rounded
+                           hover:bg-blue-600 transition-colors"
+                type="submit"
+                >
+                  Register
               </button>
             </Form>
           );

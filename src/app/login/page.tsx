@@ -57,33 +57,41 @@ export default function Login() {
           const { values, handleChange, touched, errors } = props;
 
           return (
-            <Form>
-              <div className="flex flex-col gap-4">
+            <Form className="w-full max-w-md">
+              <div className="flex flex-col gap-4 mb-4">
                 <label>Email :</label>
                 <Field
                   type="email"
                   name="email"
                   onChange={handleChange}
                   value={values.email}
+                  className="p-2 border rounded"
                 />
                 {touched.email && errors.email ? (
                   <div className="text-red-500">*{errors.email}</div>
                 ) : null}
               </div>
-              <div className="flex flex-col gap-4">
+
+              <div className="flex flex-col gap-4 mb-4">
                 <label>Password :</label>
                 <Field
                   type="password"
                   name="password"
                   onChange={handleChange}
                   value={values.password}
+                  className="p-2 border rounded"
                 />
                 {touched.password && errors.password ? (
                   <div className="text-red-500">*{errors.password}</div>
                 ) : null}
               </div>
-              <button className="standard-button" type="submit">
-                Submit
+
+              <button 
+                className="w-full bg-sky-500 text-white py-2 px-4 rounded
+                           hover:bg-blue-600 transition-colors"
+                type="submit"
+                >
+                  Login
               </button>
             </Form>
           );
