@@ -1,4 +1,4 @@
-import EODashboard from "@/pages/EO_dashboard";
+import EODashboard from "@/pages/EO-dashboard";
 import HomeView from "@/pages/home/home"
 import SearchBar from "@/pages/home";
 
