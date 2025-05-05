@@ -5,13 +5,14 @@ import { Formik, Form, Field, FormikProps } from "formik";
 import axios from "axios";
 import { useAppDispatch } from "@/lib/redux/hook";
 import { login } from "@/lib/redux/features/authSlice";
-import { useSetCookie } from "cookies-next";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 import { LoginSchema } from "./schema";
 import { Ilogin } from "./type";
 
 export default function Login() {
-  const setCookie = useSetCookie();
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const initialValues: Ilogin = { email: "", password: "" };
 
   const onLogin = async (values: Ilogin) => {
@@ -19,24 +20,45 @@ export default function Login() {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/login`,
         {
-          ...values,
+          ...values
         }
       );
 
-      dispatch(login({ user: data.user }));
+      // Debugging: Log the API response
+      console.log("Login API Response:", data); // Add this line
 
-      setCookie("access_token", data.token);
+      if (!data.token) {
+        throw new Error("No token received from server");
+      }
+
+      // Set cookie with proper options
+      setCookie('access_token', data.token, {
+        path: 'localhost',
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        sameSite: 'lax',
+        secure: false, // For localhost development
+      });
+
+      dispatch(login({ user: data.user }));
 
       Swal.fire({
         title: data.message,
         icon: "success",
         confirmButtonText: "Cool",
         timer: 2000,
+      }).then(() => {
+        // Redirect based on role
+        if (data.user.roleName?.toLowerCase() === "event organizer") {
+          window.location.href = "/eo-dashboard-page";
+        } else {
+          window.location.href = "/";
+        }
       });
     } catch (err: any) {
+      console.error("Login error:", err);
       Swal.fire({
         title: "Error!",
-        text: err.message,
+        text: err.response?.data?.message || err.message,
         icon: "error",
         confirmButtonText: "Cool",
       });

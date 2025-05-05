@@ -1,8 +1,8 @@
 // pages/index.tsx
 "use client";
 import { useState, useEffect } from "react";
-import { fetchEvents } from "../../lib/api";
-import EventCard from "../../components/EventCard";
+import { fetchEvents } from "./api"
+import EventCard from "./EventCard";
 
 type Event = {
   id: string;

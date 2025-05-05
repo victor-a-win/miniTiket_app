@@ -8,7 +8,7 @@ export const LoginSchema = Yup.object().shape({
     .min(3, "Password must be 3 characters at minimum")
     .matches(
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
-      "Password harus mengandung setidaknya satu huruf besar, satu huruf kecil, satu angka, dan satu karakter khusus"
+      "Incorrect Password"
     )
     .required("Password cannot be empty"),
 });

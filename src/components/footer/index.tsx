@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 export default function Footer() {
     const router = useRouter()
     return (
-        <div className="Footer-Styles flex flex-col bg-black bottom-0">
+        <div className="Footer-Styles flex flex-col bg-black mb-0">
             <button 
                 title="Back To Header Page" 
                 className="justify-items-center scroll-smooth" onClick={() => router.push("/")}>

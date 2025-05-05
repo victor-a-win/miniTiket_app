@@ -6,8 +6,9 @@ import { logout } from "@/lib/redux/features/authSlice";
 
 const menus = [
   {
-    label: "Dashboard",
-    path: "/dashboard",
+    label: "EO Dashboard",
+    path: "/eo-dashboard-page", // Make sure this matches the middleware matcher
+    roleName: "Event Organizer"
   },
 ];
 
@@ -16,13 +17,28 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const hasRequiredRole = (requiredRole: string | undefined) => {
+    if (!requiredRole) return true;
+    if (!auth.isLogin || !auth.user?.roleName) return false;
+    return auth.user.roleName.toLowerCase() === requiredRole.toLowerCase();
+  };
+
+  // Function to handle menu item click
   const onMenuItemClick = (path: string) => () => {
+    if (!auth.isLogin) {
+      router.push("/login");
+      return;
+    }
     router.push(path);
   };
+
   return (
     <div className="flex flex-row h-[140px] p-10 justify-between">
       <div>
-        {menus.map((menu, idx) => (
+        {menus.map((menu, idx) => {
+        // Using the new role checking function
+        if (!hasRequiredRole(menu.roleName)) return null;
+          return (
           <div
             key={idx}
             className="flex flex-row gap-4 cursor-pointer hover:bg-gray-600 p-4 rounded-md"
@@ -30,15 +46,22 @@ export default function Navbar() {
           >
             {menu.label}
           </div>
-        ))}
+          );
+        })}
       </div>
       <div>
         {auth.isLogin ? (
-          <button onClick={() => dispatch(logout())}>Logout</button>
+          <div className="flex flex-row gap-4">
+            <span>Welcome, {auth.user?.first_name}</span>
+            <button onClick={() => {
+              dispatch(logout());
+              router.push("/");
+              }}>Logout</button>
+          </div>
         ) : (
           <div className="flex flex-row gap-5">
             <button onClick={() => router.push("/login")}>Login</button>
-            <button onClick={() => router.push("/register")}>Register</button>
+            <button onClick={() => router.push("/register")}>Register</button>  
           </div>
         )}
       </div>

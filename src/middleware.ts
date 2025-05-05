@@ -3,29 +3,57 @@ import { cookies } from "next/headers";
 import { IUser } from "./interfaces/user.interface";
 import { jwtDecode } from "jwt-decode";
 
-const eoRoutes = ["/dashboard"];
+interface TokenPayload {
+  roleName?: string;
+  [key: string]: any;
+}
+
+// Protected routes
+const eoRoutes = ["/eo-dashboard-page"];
 
 export default async function middleware(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
+    const path = req.nextUrl.pathname;
+    const token = req.cookies.get('access_token')?.value;
 
-    const eoOnly = eoRoutes.some((path) =>
-      req.nextUrl.pathname.startsWith(path)
-    );
+    console.log(`Middleware triggered for ${path}, token exists: ${!!token}`); // Debugging line
 
-    const token = cookieStore.get("access_token")?.value || "";
-    if (eoOnly && !token)
-      return NextResponse.redirect(new URL("/login", req.nextUrl));
+     // Check if the current path is a protected route
+     const isEoRoute = eoRoutes.some(route => path.startsWith(route));
 
-    const user: IUser = jwtDecode(token);
+   // If trying to access protected route without token, redirect to login
+   if (isEoRoute) {
+    if (!token) {
+      console.log("No token - redirecting to login");
+      return NextResponse.redirect(new URL('/login', req.nextUrl));
+    }
 
-    if (eoOnly && user.role != "event_organizer")
-      return NextResponse.redirect(new URL("/", req.nextUrl));
+    try {
+      const decoded = jwtDecode<TokenPayload>(token);
+      console.log("Decoded token:", decoded);
+
+    // If trying to access EO route without EO role, redirect to unauthorized
+    if (decoded.roleName?.toLowerCase() !== "event organizer") {
+      console.log("Not an organizer - redirecting to home");
+      return NextResponse.redirect(new URL('/', req.nextUrl));
+    }
+    
+  // If we get here, user is authorized
+  console.log("User is authorized as organizer");
+  return NextResponse.next();
   } catch (err) {
+    console.error("Token decode error:", err);
     return NextResponse.redirect(new URL("/", req.nextUrl));
   }
 }
 
-export const config = {
-    matcher: ["/dashboard/:path*"]
+return NextResponse.next();
+  } catch (err) {
+    console.error("Middleware error:", err);
+    return NextResponse.redirect(new URL('/', req.nextUrl));
+  }
 }
+
+export const config = {
+    matcher: ["/eo-dashboard-page/:path*"]
+};

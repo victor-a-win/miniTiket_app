@@ -1,7 +1,7 @@
 // pages/Home.tsx
 "use client";
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation'
 
 type Event = {
   id: string;
@@ -20,7 +20,10 @@ export default function HomeView() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { category, location, search } = router.query;
+  const searchParams = useSearchParams();
+  const category = searchParams?.get('category') || null;
+  const location = searchParams?.get('location') || null;
+  const search = searchParams?.get('search') || null;
 
   useEffect(() => {
     async function loadEvents() {
@@ -51,7 +54,11 @@ export default function HomeView() {
       {/* Simple Filter UI - Matches your schema fields */}
       <div className="flex gap-4 mb-6">
         <select 
-          onChange={(e) => router.push({ query: { ...router.query, category: e.target.value } })}
+          onChange={(e) => {
+            const params = new URLSearchParams(searchParams?.toString());
+            params.set('category', e.target.value);
+            router.push(`?${params.toString()}`);
+          }}
           value={category || ""}
         >
           <option value="">All Categories</option>
@@ -61,7 +68,11 @@ export default function HomeView() {
         </select>
 
         <select
-          onChange={(e) => router.push({ query: { ...router.query, location: e.target.value } })}
+          onChange={(e) => {
+            const params = new URLSearchParams(searchParams?.toString());
+            params.set('location', e.target.value);
+            router.push(`?${params.toString()}`);
+          }}
           value={location || ""}
         >
           <option value="">All Locations</option>
@@ -80,7 +91,7 @@ export default function HomeView() {
             <p>Price: IDR {event.price.toLocaleString('id-ID')}</p>
             <p>Seats: {event.seats}</p>
             <button 
-              onClick={() => router.push(`/events/${event.id}`)}
+              onClick={() => router.push(`auth/events/${event.id}`)}
               className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
             >
               View Details
