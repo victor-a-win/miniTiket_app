@@ -29,6 +29,7 @@ export default async function middleware(req: NextRequest) {
     }
 
     try {
+      console.log("Token content:", token);
       const decoded = jwtDecode<TokenPayload>(token);
       console.log("Decoded token:", decoded);
 
@@ -46,7 +47,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.nextUrl));
   }
 }
-
+  console.log("Path being matched:", req.nextUrl.pathname);
 return NextResponse.next();
   } catch (err) {
     console.error("Middleware error:", err);

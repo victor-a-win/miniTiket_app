@@ -27,19 +27,28 @@ export default function Login() {
       // Debugging: Log the API response
       console.log("Login API Response:", data); // Add this line
 
-      if (!data.token) {
-        throw new Error("No token received from server");
+      if (!data.token || !data.user) {
+        throw new Error("Invalid response from server");
       }
 
       // Set cookie with proper options
       setCookie('access_token', data.token, {
-        path: 'localhost',
+        path: '/',
         maxAge: 60 * 60 * 24 * 7, // 1 week
         sameSite: 'lax',
         secure: false, // For localhost development
       });
 
-      dispatch(login({ user: data.user }));
+      // Dispatch login with complete user data
+      dispatch(login({ 
+        user: {
+          id: data.user.id,
+          email: data.user.email,
+          first_name: data.user.first_name,
+          last_name: data.user.last_name,
+          roleName: data.user.roleName
+        }
+      }));
 
       Swal.fire({
         title: data.message,
@@ -47,12 +56,10 @@ export default function Login() {
         confirmButtonText: "Cool",
         timer: 2000,
       }).then(() => {
-        // Redirect based on role
-        if (data.user.roleName?.toLowerCase() === "event organizer") {
-          window.location.href = "/eo-dashboard-page";
-        } else {
-          window.location.href = "/";
-        }
+      // Force reload to sync server and client state
+      window.location.href = data.user.roleName.toLowerCase() === "event organizer" 
+          ? "/eo-dashboard-page" 
+          : "/";
       });
     } catch (err: any) {
       console.error("Login error:", err);

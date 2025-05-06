@@ -23,6 +23,8 @@ export default function Navbar() {
     return auth.user.roleName.toLowerCase() === requiredRole.toLowerCase();
   };
 
+  console.log("Auth state:", auth); // Debugging line
+
   // Function to handle menu item click
   const onMenuItemClick = (path: string) => () => {
     if (!auth.isLogin) {

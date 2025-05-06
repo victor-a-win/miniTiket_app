@@ -2,27 +2,26 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {IUser} from "../../../interfaces/user.interface";
 
 export interface IAuth {
-  user: IUser | null;
   isLogin?: boolean;
+  user: IUser | null;
 }
 
 const initialState: IAuth = {
-  user: null,  // Start with null instead of empty user object
   isLogin: false,
+  user: null,
 };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state: IAuth, action: PayloadAction<IAuth>) => {
-        state.user = action.payload.user;
-        state.isLogin = true;
+    login: (state, action: PayloadAction<{ user: IUser }>) => {
+      state.isLogin = true;  
+      state.user = action.payload.user;
     },
-    logout: (state: IAuth) => {
-      state.user = null;
+    logout: (state) => {
       state.isLogin = false;
-      localStorage.removeItem("access_token");
+      state.user = null;
     },
   },
 });
