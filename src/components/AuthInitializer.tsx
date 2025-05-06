@@ -7,23 +7,27 @@ import { getCookie } from "cookies-next";
 
 import { IUser } from "@/interfaces/user.interface";
 
-export default function AuthProvider({
+export default function AuthInitializer({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const dispatch = useAppDispatch();
 
-  const handleRefresh = async () => {
-    const access_token = (await getCookie("access_token")) || "";
-
-    if (access_token) {
-      const user: IUser = jwtDecode(access_token);
-      dispatch(login({ user }));
-    }
-  };
   useEffect(() => {
-    handleRefresh;
-  }, []);
+    const initializeAuth = async () => {
+      const token = getCookie("access_token");
+      if (token) {
+        try {
+          const user: IUser = jwtDecode(token.toString());
+          dispatch(login({ user }));
+        } catch (error) {
+          console.error("Token decode error:", error);
+        }
+      }
+    };
+    initializeAuth();
+  }, [dispatch]);
+
   return <>{children}</>;
 }

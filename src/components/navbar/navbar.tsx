@@ -3,6 +3,7 @@
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
 import { useRouter } from "next/navigation";
 import { logout } from "@/lib/redux/features/authSlice";
+import { useEffect, useState } from "react";
 
 const menus = [
   {
@@ -13,15 +14,25 @@ const menus = [
 ];
 
 export default function Navbar() {
+  const [isHydrated, setIsHydrated] = useState(false);
   const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  // add loading state
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const hasRequiredRole = (requiredRole: string | undefined) => {
     if (!requiredRole) return true;
     if (!auth.isLogin || !auth.user?.roleName) return false;
     return auth.user.roleName.toLowerCase() === requiredRole.toLowerCase();
   };
+
+  if (!isHydrated) {
+    return <div className="h-[140px] p-10">Loading...</div>;
+  }
 
   console.log("Auth state:", auth); // Debugging line
 
