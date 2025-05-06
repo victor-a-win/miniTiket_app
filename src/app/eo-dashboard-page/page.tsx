@@ -1,4 +1,4 @@
-import EODashboard from "@/pages/eo-dashboard"
+import EODashboard from "@/pages/EO-dashboard/index"
 
 export default function EODashboardPage() {
   return (

@@ -1,11 +1,9 @@
-import HomeView from "@/pages/home/home"
-import SearchBar from "@/pages/home";
+import EventsLandingPage from "./events/page";
 
 export default function Home() {
   return (
     <div>
-        <SearchBar />
-        <HomeView />
+        <EventsLandingPage />
     </div>
   )
 }
