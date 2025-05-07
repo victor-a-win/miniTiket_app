@@ -175,6 +175,8 @@ export default function Register() {
           );
         }}
       </Formik>
+      <p className="text-sm text-gray-500">Already have an account? <a href="/login" className="text-blue-500 hover:underline">Login here</a></p>
+      <br />
     </div>
   );
 }

@@ -3,3 +3,14 @@
 .Footer-Styles {
     font-family: "Libre Bodoni", serif;
 }
+
+.Back-to-HomePage:hover{
+    background-color: azure;
+    color: black;
+    border-width: 6px;
+}
+.Back-to-HomePage:active {
+    background-color: grey;
+    color: white;
+    border-width: 6px;
+}
