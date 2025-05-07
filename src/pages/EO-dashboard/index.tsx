@@ -7,8 +7,9 @@ import { useEffect } from "react";
 import BasicStatistics from "./sections/statistics-section";
 import TransactionManagement from "./sections/transaction-management-section";
 import EventManagement from "./sections/event-management-section";
-import "./EO_dashboard.style.css"
 import AttendeeList from "./sections/attendee-list-section";
+
+import "./eo_dashboard.style.css"
 
 export default function EODashboard() {
   const auth = useAppSelector((state) => state.auth);
@@ -37,38 +38,29 @@ export default function EODashboard() {
   }
 
   return ( 
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-blue-600"
+    <div className="EO-Dashboard-Styles p-6">
+      <h1 className="text-3xl font-bold"
         > Welcome, {auth.user.first_name} 
       </h1>
 
-      <div className="text-lg text-gray-700 mt-4"
-        > This is your Event Organizer dashboard.
+      <div className="text-base mt-4"> 
+        <p>
+          This is your Event Organizer dashboard. 
           Here you can manage your events, view statistics, and more.
+        </p>
       </div>
-
+      
       <div className="mt-8">
-        <h2 className="text-l font-semibold">
           < EventManagement />
-        </h2>
       </div>
-
       <div className="mt-8">
-        <h2 className="text-2xl font-semibold"> 
           < BasicStatistics />
-        </h2>
       </div>
-
       <div className="mt-8">
-        <h2 className="text-2xl font-semibold">
           < TransactionManagement />
-        </h2>
       </div>
-
       <div className="mt-8"> 
-        <h2 className="text-l font-semibold">
           < AttendeeList />
-        </h2>
       </div>
     </div>
   );

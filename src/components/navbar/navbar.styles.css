@@ -1,6 +1,6 @@
 .NavBar-Styles {
-    border-top: 2px solid ghostwhite;
-    border-bottom: 2px solid ghostwhite;
+    border-top: 3px solid #219EBC;
+    border-bottom: 3px solid #219EBC;
     font-family: Georgia, 'Times New Roman', Times, serif;
 
     img:hover {
@@ -8,36 +8,35 @@
     }
 }
 
-.Dashboard-Button-Stlyes {
-    color: orange;
+.Nav-Button-Stlyes {
+    color: #FFB703;
     margin-top: 15px;
-    padding: 15px 10px 0px 10px;
+    padding: 15px 0px 0px 0px;
     font-size: 19px;
     transition: all 0.3s ease-in-out;
 
     &:hover {
-        color: azure;
+        color: #219EBC;
     }
 
     &:active {
-        color: white;
+        color: #8ECAE6;
         cursor: pointer;
     }
 }
 
 .Auth-Button-Styles {
-    color: orange;
+    color: #FFB703;
     margin-top: 15px;
     padding: 15px 10px 0px 10px;
     font-size: 17px;
-    cursor: pointer;
     transition: all 0.3s ease-in-out;
 
     &:hover {
-        color: azure;
+        color: #219EBC;
     }
 
     &:active {
-        color: white;
+        color: #8ECAE6;
     }
 }

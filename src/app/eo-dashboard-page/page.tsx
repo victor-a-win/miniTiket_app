@@ -4,7 +4,6 @@ export default function EODashboardPage() {
   return (
     <div>
       <EODashboard />
-    <br />
     </div>
   )
 }

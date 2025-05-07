@@ -3,7 +3,7 @@ export default function BasicStatistics() {
       <div className="flex flex-col gap-4">
         {/* Add your statistics components here */}
         {/* You can use charts or tables to display data */}
-        <div className="flex items-center justify-between text-orange-600">
+        <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">Basic Statistics</h2>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

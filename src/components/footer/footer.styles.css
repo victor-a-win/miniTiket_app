@@ -2,15 +2,25 @@
 
 .Footer-Styles {
     font-family: "Libre Bodoni", serif;
+    background-color: #023047;
 }
 
 .Back-to-HomePage:hover{
-    background-color: azure;
-    color: black;
-    border-width: 6px;
+    background-color: #FB8500;
+    border-width: 2px;
+    border-color: #219EBC;
 }
 .Back-to-HomePage:active {
-    background-color: grey;
-    color: white;
-    border-width: 6px;
+    background-color: #FFB703;
+    border-width: 5px;
+    border-color: #8ECAE6;
+}
+
+.Footer-Botton-Styles{
+    font-weight: 700;
+    color: #8ECAE6
+}
+
+.License-Caption-Styles{
+    color: #FFB703
 }

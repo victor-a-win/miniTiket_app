@@ -7,6 +7,8 @@ import axios from "axios";
 import { RegisterSchema } from "./schema";
 import { IRegister } from "./type";
 
+import "./register.styles.css";
+
 export default function Register() {
   const initialValues: IRegister = {
     email: "",
@@ -61,8 +63,8 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col justify-center justify-items-center items-center gap-5">
-      <p className="text-4xl">REGISTER FORM</p>
+    <div className="Register-Styles flex flex-col justify-center justify-items-center items-center gap-5">
+      <p className="text-3xl font-bold">REGISTER FORM</p>
       <Formik
         initialValues={initialValues}
         validationSchema={RegisterSchema}
@@ -75,7 +77,7 @@ export default function Register() {
 
           return (
             <Form className="w-full max-w-md">
-              <div className="flex flex-col gap-4 mb-4">
+              <div className="flex flex-col gap-2 mb-3">
                 <label>Email :</label>
                 <Field
                   type="email"
@@ -89,7 +91,7 @@ export default function Register() {
                 ) : null}
               </div>
 
-              <div className="flex flex-col gap-4 mb-4">
+              <div className="flex flex-col gap-2 mb-3">
                 <label>Password :</label>
                 <Field
                   type="password"
@@ -103,7 +105,7 @@ export default function Register() {
                 ) : null}
               </div>
 
-              <div className="flex flex-col gap-4 mb-4">
+              <div className="flex flex-col gap-2 mb-3">
                 <label>First Name :</label>
                 <Field
                   type="text"
@@ -117,7 +119,7 @@ export default function Register() {
                 ) : null}
               </div>
 
-              <div className="flex flex-col gap-4 mb-4">
+              <div className="flex flex-col gap-2 mb-3">
                 <label>Last Name :</label>
                 <Field
                   type="text"
@@ -131,7 +133,7 @@ export default function Register() {
                 ) : null}
               </div>
 
-              <div className="flex flex-col gap-4 mb-4">
+              <div className="flex flex-col gap-2 mb-3">
                 <label>Role :</label>
                 <Field
                   as="select"
@@ -148,7 +150,7 @@ export default function Register() {
                 ) : null}
               </div>
 
-              <div className="flex flex-col gap-4 mb-4">
+              <div className="flex flex-col gap-2 mb-3">
                 <label>Referred by (optional) :</label>
                 <Field
                   type="text"
@@ -163,8 +165,8 @@ export default function Register() {
               </div>
               
               <button
-                className={`w-full bg-sky-500 text-white py-2 px-4 rounded
-                           hover:bg-blue-600 transition-colors 
+                className={`w-full bg-blue-900 text-white py-2 px-4 rounded
+                           hover:bg-blue-400 transition-colors 
                            ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                 type="submit"
                 disabled={isSubmitting}
@@ -175,7 +177,12 @@ export default function Register() {
           );
         }}
       </Formik>
-      <p className="text-sm text-gray-500">Already have an account? <a href="/login" className="text-blue-500 hover:underline">Login here</a></p>
+      <p className="text-sm text-gray-500"
+        > Already have an account? 
+          <a href="/login" className="text-blue-900 hover:underline"
+            > Login here
+          </a>
+      </p>
       <br />
     </div>
   );

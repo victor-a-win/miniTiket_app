@@ -7,19 +7,22 @@ import { useRouter } from "next/navigation"
 export default function Footer() {
     const router = useRouter()
     return (
-        <div className="Footer-Styles flex flex-col bg-black">
+        <div className="Footer-Styles flex flex-col">
             <button 
                 title="Back To HomePage" 
                 className="justify-items-center scroll-smooth" onClick={() => router.push("/")}>
-                <ChevronDoubleUpIcon className="Back-to-HomePage size-11 text-sky-500 sm:size-16 cursor-pointer hover:bg-gray-600 p-1 rounded-md" />
+                <ChevronDoubleUpIcon className=
+                    "Back-to-HomePage size-11 text-sky-500 sm:size-16 cursor-pointer hover:bg-gray-600 p-1 rounded-md" 
+                />
             </button>
 
             <div className=
-                "ml-auto mr-auto text-lg text-orange-400 text-center font-bold sm:text-3xl/8"
+                "Footer-Botton-Styles ml-auto mr-auto text-2xl text-center sm:text-lg"
                 > BACK TO HOMEPAGE
             </div>
 
-            <div className="bg-black text-sm text-white text-center sm:text-lg/10">
+            <div className=
+                "License-Caption-Styles text-sm text-center sm:text-sm/10">
                 © 2025 miniTiket Projek Studio. All rights reserved.
             </div>
         </div>

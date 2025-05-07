@@ -1,7 +1,7 @@
 export default function AttendeeList() {
   return (
     <div>
-      <h2 className="text-2xl font-semibold text-orange-600">
+      <h2 className="text-2xl font-semibold">
         Attendee List
       </h2>
       <p>

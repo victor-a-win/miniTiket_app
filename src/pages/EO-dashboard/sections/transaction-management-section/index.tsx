@@ -2,7 +2,7 @@ export default function TransactionManagement() {
   return (
     <div className="flex flex-col gap-4">
         {/* Organizers can accept, reject, and view user payment proofs. */}
-      <div className="flex items-center justify-between text-orange-600">
+      <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold"
                 > Transaction Management
             </h2>
@@ -12,17 +12,17 @@ export default function TransactionManagement() {
             <h3 className="text-lg font-semibold"
                 > Accepted Transactions
             </h3>
-            <p className="text-2xl font-bold">coming soon</p>
+            <p className="text-base font-bold">coming soon</p>
         </div>
         <div className="p-4 bg-white rounded-lg shadow-md">
             <h3 className="text-lg font-semibold"
                 > Rejected Transactions </h3>
-            <p className="text-2xl font-bold">coming soon</p>
+            <p className="text-base font-bold">coming soon</p>
         </div>
         <div className="p-4 bg-white rounded-lg shadow-md">
             <h3 className="text-lg font-semibold"
                 > User Payment Proof</h3>
-            <p className="text-2xl font-bold">coming soon</p>
+            <p className="text-base font-bold">coming soon</p>
         </div>
       </div>
     </div>
