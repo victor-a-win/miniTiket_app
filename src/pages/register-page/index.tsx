@@ -45,11 +45,20 @@ export default function Register() {
 
       // Close loading and show success
       Swal.fire({
-        title: "Success!",
-        text: data.message,
+        title: "Registration Successful!",
+        html: 
+          `<div>
+            <p>${data.message}</p>
+              <div class="mt-4">
+                We've sent an activation link to your email (${values.email}).
+              </div>
+              <div class="mt-2">
+                Please check your inbox and click the activation link to verify your account.
+              </div>
+          </div>`
+        ,
         icon: "success",
-        confirmButtonText: "Cool",
-        timer: 2000,
+        confirmButtonText: "OK",
       });
     } catch (err: any) {
       // Close loading and show error
@@ -63,7 +72,16 @@ export default function Register() {
   };
 
   return (
-    <div className="Register-Styles flex flex-col justify-center justify-items-center items-center gap-5">
+     <div className="Register-Styles flex flex-row justify-around p-2">
+      <div className="mt-40">
+        <img  className="size-96 rounded-lg basis-96"
+          src="register_page_pic_v2.jpg" alt="Register Picture"
+        />
+      </div>
+    <div 
+      className="basis-128 mt-4 mb-2
+                flex flex-col justify-center justify-items-center items-center gap-5"
+      >
       <p className="text-3xl font-bold">REGISTER FORM</p>
       <Formik
         initialValues={initialValues}
@@ -158,6 +176,7 @@ export default function Register() {
                   onChange={handleChange}
                   value={values.referred_by}
                   className="p-2 border rounded"
+                   placeholder="Example: TIX-NUMBERS"
                 />
                 {touched.referred_by && errors.referred_by ? (
                   <div className="text-red-500">*{errors.referred_by}</div>
@@ -183,7 +202,7 @@ export default function Register() {
             > Login here
           </a>
       </p>
-      <br />
     </div>
+  </div>
   );
 }

@@ -33,9 +33,13 @@ export default function RootLayout({
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <AuthInitializer>
-              <Navbar />
-                {children}
-              <Footer />
+              <div className="min-h-screen flex flex-col">
+                <Navbar />
+                  <main className="flex-grow">
+                    {children}
+                  </main>
+                <Footer />
+              </div>
             </AuthInitializer>
           </PersistGate>
         </Provider>

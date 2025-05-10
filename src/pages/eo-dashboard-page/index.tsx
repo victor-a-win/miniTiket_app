@@ -2,7 +2,7 @@
 
 import { useAppSelector } from "@/lib/redux/hook";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import BasicStatistics from "./sections/statistics-section";
 import TransactionManagement from "./sections/transaction-management-section";
@@ -14,6 +14,8 @@ import "./eo_dashboard.style.css"
 export default function EODashboard() {
   const auth = useAppSelector((state) => state.auth);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     // Only check auth state if we're running on client
@@ -22,6 +24,8 @@ export default function EODashboard() {
         router.push('/login');
       } else if (auth.user?.roleName?.toLowerCase() !== 'event organizer') {
         router.push('/');
+      } else {
+        setIsLoading(false);
       }
     }
   }, [auth, router]);
@@ -29,10 +33,11 @@ export default function EODashboard() {
   console.log("Auth state:", auth); // Debugging line
 
   // Show loading state while checking authentication
-  if (!auth.isLogin || auth.user?.roleName?.toLowerCase() !== 'event organizer'
+  if (isLoading || !auth.isLogin || auth.user?.roleName?.toLowerCase() !== 'event organizer'
   ) {
     return <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500">
+        <div 
+          className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500">
         </div>
       </div>;
   }

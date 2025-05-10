@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { IUser } from "./interfaces/user.interface";
 import { jwtDecode } from "jwt-decode";
 
 interface TokenPayload {
@@ -9,7 +7,7 @@ interface TokenPayload {
 }
 
 // Protected routes
-const eoRoutes = ["/eo-dashboard-page"];
+const eoRoutes = ["/eo-dashboard"];
 
 export default async function middleware(req: NextRequest) {
   try {
@@ -56,5 +54,5 @@ return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/eo-dashboard-page/:path*"]
+    matcher: ["/eo-dashboard/:path*"]
 };

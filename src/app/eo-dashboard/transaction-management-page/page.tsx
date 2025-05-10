@@ -1,4 +1,4 @@
-import TransactionManagement from "@/pages/eo-dashboard/sections/transaction-management-section"
+import TransactionManagement from "@/pages/eo-dashboard-page/sections/transaction-management-section"
 
 export default function TransactionManagementPage() {
   return (

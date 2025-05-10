@@ -1,4 +1,4 @@
-import EventManagement from "@/pages/eo-dashboard/sections/event-management-section"
+import EventManagement from "@/pages/eo-dashboard-page/sections/event-management-section"
 
 export default function EventManagementPage() {
   return (

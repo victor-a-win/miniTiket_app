@@ -1,13 +1,13 @@
 'use client'
 import "./footer.styles.css"
-
 import { ChevronDoubleUpIcon } from "@heroicons/react/20/solid"
 import { useRouter } from "next/navigation"
 
 export default function Footer() {
     const router = useRouter()
     return (
-        <div className="Footer-Styles flex flex-col">
+        <footer 
+            className="Footer-Styles flex flex-col bg-[url('/banner_web_minpro_v1.png')] mt-auto">
             <button 
                 title="Back To HomePage" 
                 className="justify-items-center scroll-smooth" onClick={() => router.push("/")}>
@@ -16,15 +16,15 @@ export default function Footer() {
                 />
             </button>
 
-            <div className=
-                "Footer-Botton-Styles ml-auto mr-auto text-2xl text-center sm:text-lg"
+            <div 
+                className= "Footer-Botton-Styles ml-auto mr-auto text-base text-center tracking-widest sm:text-lg"
                 > BACK TO HOMEPAGE
             </div>
 
             <div className=
-                "License-Caption-Styles text-sm text-center sm:text-sm/10">
-                © 2025 miniTiket Projek Studio. All rights reserved.
+                "License-Caption-Styles text-xs text-center tracking-widest sm:text-sm/10">
+                © 2025 TuneInLive. All rights reserved.
             </div>
-        </div>
+        </footer>
     )
 }

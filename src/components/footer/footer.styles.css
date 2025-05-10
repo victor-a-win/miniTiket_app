@@ -2,7 +2,8 @@
 
 .Footer-Styles {
     font-family: "Libre Bodoni", serif;
-    background-color: #023047;
+    margin-bottom: auto;
+    margin-top: auto;
 }
 
 .Back-to-HomePage:hover{
@@ -18,9 +19,9 @@
 
 .Footer-Botton-Styles{
     font-weight: 700;
-    color: #8ECAE6
+    color: white
 }
 
 .License-Caption-Styles{
-    color: #FFB703
+    color: white
 }

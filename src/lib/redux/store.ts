@@ -1,7 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore  } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import createWebStorage from "redux-persist/lib/storage";
+
 import authSlice from "./features/authSlice";
+
+const createNoopStorage = () => {
+  return {
+    getItem(_key: string) {
+      return Promise.resolve(null);
+    },
+    setItem(_key: string, value: any) {
+      return Promise.resolve(value);
+    },
+    removeItem(_key: string) {
+      return Promise.resolve();
+    },
+  };
+};
+
+const storage = typeof window !== "undefined" ? createWebStorage : createNoopStorage();
 
 const persistConfig = {
   key: "root",
@@ -11,7 +28,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, authSlice);
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     auth: persistedReducer,
   },
@@ -21,9 +38,10 @@ const store = configureStore({
     }),
 });
 
-const persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;
 
-export { store, persistor };
+

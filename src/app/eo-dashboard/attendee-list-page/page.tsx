@@ -1,4 +1,4 @@
-import AttendeeList from "@/pages/eo-dashboard/sections/attendee-list-section"
+import AttendeeList from "@/pages/eo-dashboard-page/sections/attendee-list-section"
 
 export default function AttendeeListPage() {
   return (
