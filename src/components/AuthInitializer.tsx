@@ -20,7 +20,7 @@ export default function AuthInitializer({
       if (token) {
         try {
           const user: IUser = jwtDecode(token.toString());
-          dispatch(login({ user }));
+          dispatch(login({ user, token: token.toString() }));
         } catch (error) {
           console.error("Token decode error:", error);
         }

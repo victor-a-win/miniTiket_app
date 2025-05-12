@@ -13,13 +13,20 @@ import { LoginSchema } from "./schema";
 import { Ilogin } from "./type";
 import { useRouter } from "next/navigation";
 
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import "./login.styles.css"
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [showPassword, setShowPassword] = useState({password: false});
   const initialValues: Ilogin = { email: "", password: "" };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = (field: keyof typeof showPassword) => {
+    setShowPassword(prev => ({ ...prev, [field]: !prev[field] }));
+  };
 
   // State for reset password modal
   const [showResetModal, setShowResetModal] = useState(false);
@@ -100,53 +107,44 @@ export default function Login() {
         text: err.response?.data?.message || err.message,
         icon: "error",
         confirmButtonText: "OK",
-      });
+      }).then(() => {
+        window.location.reload(); // Refresh to show set new password state
+      });;
     }
   };
 
   const onLogin = async (values: Ilogin) => {
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/login`,
         {
           ...values
         }
       );
+      const { user, token } = response.data;
 
       // Debugging: Log the API response
-      console.log("Login API Response:", data); // Add this line
+      console.log("Login API Response:", response.data); // Add this line
 
-      if (!data.token || !data.user) {
+      if (!response.data.token || !response.data.user) {
         throw new Error("Invalid response from server");
       }
 
       // Set cookie with proper options
-      setCookie('access_token', data.token, {
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        sameSite: 'lax',
-        secure: false, // For localhost development
-      });
+      const cookieOptions = { path: '/', maxAge: 60 * 60 * 24 }; // Example options
+      setCookie('access_token', response.data.token, cookieOptions)
 
       // Dispatch login with complete user data
-      dispatch(login({ 
-        user: {
-          id: data.user.id,
-          email: data.user.email,
-          first_name: data.user.first_name,
-          last_name: data.user.last_name,
-          roleName: data.user.roleName
-        }
-      }));
+      dispatch(login({ user, token }));
 
       Swal.fire({
-        title: data.message,
+        title: response.data.message,
         icon: "success",
         confirmButtonText: "Cool",
         timer: 2000,
       }).then(() => {
       // Force reload to sync server and client state
-      window.location.href = data.user.roleName.toLowerCase() === "event organizer" 
+        window.location.href = response.data.user.roleName.toLowerCase() === "event organizer" 
           ? "/eo-dashboard" 
           : "/";
       });
@@ -154,26 +152,31 @@ export default function Login() {
       console.error("Login error:", err);
       Swal.fire({
         title: "Error!",
-        text: err.response?.data?.message || err.message,
+        text: "Login failed, please recheck your email and password",
         icon: "error",
         confirmButtonText: "Cool",
+      }).then(() => {
+        window.location.reload(); // Refresh to show new login state
       });
     }
   };
   
   return (
-    <div className="Login-Styles flex flex-row justify-evenly gap-3 p-8">
-      <div className="ml-16 mt-3">
-        <img className="size-96 rounded-lg basis-96"
+    <div className="Login-Styles flex flex-col sm:flex-row justify-center items-center 
+                    sm:justify-evenly sm:items-end sm:gap-3 sm:p-8"
+      >
+      <div className="mt-5 sm:px-12 sm:py-12">
+        <img className="h-35 w-60 object-contain object-center 
+                        sm:h-72 sm:min-w-9 sm:object-cover ... sm:rounded-lg sm:basis-96"
           src="login_page_pic_v2.jpg" alt="Login Picture"
         />
       </div>
     <div 
-      className="basis-128 mt-2 
-                flex flex-col justify-between justify-items-center items-center gap-3"
+      className="sm:basis-128 mt-6 sm:mt-2 
+                flex flex-col justify-between justify-items-center items-center gap-2 sm:gap-4"
       >
-      <h1 className="text-3xl font-bold pt-10"
-        > LOGIN FORM
+      <h1 className="font-bold text-2xl sm:text-3xl sm:pt-10"
+        > Log in to your account
       </h1>
       <Formik
         initialValues={initialValues}
@@ -183,10 +186,10 @@ export default function Login() {
         }}
       >
         {(props: FormikProps<Ilogin>) => {
-          const { isSubmitting, values, handleChange, touched, errors } = props;
+          const { isSubmitting, values, handleChange, handleBlur, touched, errors } = props;
 
           return (
-            <Form className="w-full max-w-md">
+            <Form className="w-2xs sm:w-full sm:max-w-md">
               <div className="flex flex-col gap-2 mb-3">
                 <label>Email :</label>
                 <Field
@@ -195,6 +198,7 @@ export default function Login() {
                   onChange={handleChange}
                   value={values.email}
                   className="p-2 border rounded"
+                  placeholder="name@gmail.com"
                 />
                 {touched.email && errors.email ? (
                   <div className="text-red-500">*{errors.email}</div>
@@ -203,13 +207,28 @@ export default function Login() {
 
               <div className="flex flex-col gap-2 mb-3">
                 <label>Password :</label>
-                <Field
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  value={values.password}
-                  className="p-2 border rounded"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword.password ? "text" : "password"}
+                    name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    className="p-2 border rounded w-full pr-10"
+                    placeholder="•••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility('password')}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    {showPassword.password ? (
+                      <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5 text-gray-500" />
+                    )}
+                  </button>
+                </div>
                 {touched.password && errors.password ? (
                   <div className="text-red-500">*{errors.password}</div>
                 ) : null}
@@ -232,11 +251,11 @@ export default function Login() {
       
       <button 
         onClick={() => router.push('/request-password-reset')}
-        className="text-sm text-blue-600 hover:underline cursor-pointer"
+        className="text-sm sm:text-base text-blue-600 hover:underline cursor-pointer"
         > Forgot password?
       </button>
 
-      <p className="text-sm text-gray-500"
+      <p className="text-gray-500 mb-5 text-sm sm:text-base"
         > Don't have an account?{" "}
           <a href="/register" className="text-blue-900 hover:underline"
             > Register here

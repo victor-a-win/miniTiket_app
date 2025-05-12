@@ -1,4 +1,3 @@
-// lib/redux/persistor.ts
 import { persistStore } from "redux-persist";
 import { store } from "./store";
 

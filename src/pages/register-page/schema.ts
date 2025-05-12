@@ -5,7 +5,7 @@ export const RegisterSchema = Yup.object().shape({
     .email("Invalid email address format")
     .required("Email cannot be empty"),
   password: Yup.string()
-    .min(3, "Password must be 3 characters at minimum")
+    .min(5, "Password must be 5 characters at minimum")
     .matches(
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
       "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"

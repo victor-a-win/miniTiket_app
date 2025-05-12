@@ -6,13 +6,22 @@ import Swal from "sweetalert2";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
 
-// import { ChangePasswordSchema } from "./schema";
+import { ResetPasswordSchema } from "./schema";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 export default function ResetPassword() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [token, setToken] = useState("");
   const [isValidToken, setIsValidToken] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    new: false,
+    confirm: false
+  });
+
+  const togglePasswordVisibility = (field: keyof typeof showPassword) => {
+    setShowPassword(prev => ({ ...prev, [field]: !prev[field] }));
+  };
 
   // Check token on component mount
   useEffect(() => {
@@ -115,7 +124,7 @@ export default function ResetPassword() {
         
         <Formik
           initialValues={{ newPassword: "", confirmPassword: "" }}
-          // validationSchema={ChangePasswordSchema}
+          validationSchema={ResetPasswordSchema}
           onSubmit={(values) => {
             if (values.newPassword === values.confirmPassword) {
               handlePasswordReset(values.newPassword);
@@ -129,23 +138,57 @@ export default function ResetPassword() {
             }
           }}
         > 
-          {({ isSubmitting }) => (
+          {({ isSubmitting, handleChange, handleBlur }) => (
             <Form>
               <div className="mb-4">
-                <label className="block mb-2">New Password</label>
-                <Field
-                  type="password"
-                  name="newPassword"
-                  className="w-full p-2 border rounded"
-                />
+                <label className="block mb-2"
+                  > New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword.new ? "text" : "password"}
+                    name="newPassword"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="mt-1 block w-full p-2 border rounded-md pr-10"
+                    placeholder="•••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility('new')}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                  >
+                    {showPassword.new ? (
+                      <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5 text-gray-500" />
+                    )}
+                  </button>
+                </div>
               </div>
               <div className="mb-4">
                 <label className="block mb-2">Confirm Password</label>
-                <Field
-                  type="password"
-                  name="confirmPassword"
-                  className="w-full p-2 border rounded"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword.confirm ? "text" : "password"}
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="mt-1 block w-full p-2 border rounded-md pr-10"
+                    placeholder="•••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility('confirm')}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                  >
+                    {showPassword.confirm ? (
+                      <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5 text-gray-500" />
+                    )}
+                  </button>
+                </div>
               </div>
               <div className="flex gap-2">
                 <button

@@ -6,10 +6,13 @@ import axios from "axios";
 
 import { RegisterSchema } from "./schema";
 import { IRegister } from "./type";
+import { useState } from "react";
 
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import "./register.styles.css";
 
 export default function Register() {
+  const [showPassword, setShowPassword] = useState({password: false});
   const initialValues: IRegister = {
     email: "",
     password: "",
@@ -17,6 +20,11 @@ export default function Register() {
     lastName: "",
     roleId: 1 as number, // Default to role 1
     referred_by: "",
+  };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = (field: keyof typeof showPassword) => {
+    setShowPassword(prev => ({ ...prev, [field]: !prev[field] }));
   };
 
   const onRegister = async (values: IRegister) => {
@@ -59,6 +67,8 @@ export default function Register() {
         ,
         icon: "success",
         confirmButtonText: "OK",
+      }).then(() => {
+        window.location.reload(); // Refresh register page
       });
     } catch (err: any) {
       // Close loading and show error
@@ -67,22 +77,30 @@ export default function Register() {
         text: err.response?.data?.message || err.message,
         icon: "error",
         confirmButtonText: "OK",
+      }).then(() => {
+        window.location.reload(); // Refresh register page
       });
     }
   };
 
   return (
-     <div className="Register-Styles flex flex-row justify-around p-2">
-      <div className="mt-40">
-        <img  className="size-96 rounded-lg basis-96"
+     <div className="Register-Styles flex flex-col sm:flex-row justify-center items-center 
+                    sm:justify-evenly sm:gap-3 sm:p-2"
+      >
+      <div className="mt-5 sm:py-12 sm:px-12">
+        <img  className="h-35 w-60 object-contain object-center
+                         sm:h-72 sm:min-w-9 sm:object-cover ... sm:size-96 sm:rounded-lg sm:basis-96"
           src="register_page_pic_v2.jpg" alt="Register Picture"
         />
       </div>
     <div 
-      className="basis-128 mt-4 mb-2
-                flex flex-col justify-center justify-items-center items-center gap-5"
+      className="sm:basis-128 mt-6 sm:mt-2
+                flex flex-col justify-center justify-items-center items-center 
+                gap-2 sm:gap-5"
       >
-      <p className="text-3xl font-bold">REGISTER FORM</p>
+      <p className="text-xl sm:text-3xl sm:pt-10"
+        > Create your TuneInLive account
+      </p>
       <Formik
         initialValues={initialValues}
         validationSchema={RegisterSchema}
@@ -91,7 +109,7 @@ export default function Register() {
         }}
       >
         {(props: FormikProps<IRegister>) => {
-          const { isSubmitting, values, handleChange, touched, errors } = props;
+          const { isSubmitting, values, handleChange, handleBlur, touched, errors } = props;
 
           return (
             <Form className="w-full max-w-md">
@@ -103,6 +121,7 @@ export default function Register() {
                   onChange={handleChange}
                   value={values.email}
                   className="p-2 border rounded"
+                  placeholder="name@gmail.com"
                 />
                 {touched.email && errors.email ? (
                   <div className="text-red-500">*{errors.email}</div>
@@ -111,13 +130,28 @@ export default function Register() {
 
               <div className="flex flex-col gap-2 mb-3">
                 <label>Password :</label>
-                <Field
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  value={values.password}
-                  className="p-2 border rounded"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword.password ? "text" : "password"}
+                    name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    className="p-2 border rounded w-full pr-10"
+                    placeholder="•••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility('password')}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    {showPassword.password ? (
+                      <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5 text-gray-500" />
+                    )}
+                  </button>
+                </div>
                 {touched.password && errors.password ? (
                   <div className="text-red-500">*{errors.password}</div>
                 ) : null}
@@ -176,7 +210,7 @@ export default function Register() {
                   onChange={handleChange}
                   value={values.referred_by}
                   className="p-2 border rounded"
-                   placeholder="Example: TIX-NUMBERS"
+                  placeholder="Example: TIX-NUMBERS"
                 />
                 {touched.referred_by && errors.referred_by ? (
                   <div className="text-red-500">*{errors.referred_by}</div>
@@ -196,7 +230,7 @@ export default function Register() {
           );
         }}
       </Formik>
-      <p className="text-sm text-gray-500"
+      <p className="text-gray-500 mb-5 text-sm sm:text-base"
         > Already have an account? 
           <a href="/login" className="text-blue-900 hover:underline"
             > Login here
