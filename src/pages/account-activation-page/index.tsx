@@ -1,10 +1,9 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
 
 export default function ActivationAccount() {
   const searchParams = useSearchParams();

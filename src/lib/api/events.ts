@@ -1,13 +1,22 @@
 import { Event } from "@/interfaces/event.interface";
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-export async function fetchEvents(): Promise<Event[]> {
-  const res = await fetch(`${API_URL}/events`);
-  if (!res.ok) throw new Error("Gagal memuat event");
-  return res.json();
-}
-export async function fetchEventDetail(id: string): Promise<Event> {
-    const res = await fetch(`${API_URL}/events/${id}`);
-    if (!res.ok) throw new Error("Event tidak ditemukan");
-    return res.json();
-  }
-  
+import axios from "axios";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+export const fetchEvents = async (params?: {
+  category?: string;
+  location?: string;
+  search?: string;
+}) => {
+  try {
+  const response = await axios.get(`${API_URL}/events`, { params });
+  return response.data;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    throw error;
+  } 
+};
+
+export const fetchEventDetails = async (id: string) => {
+  const response = await axios.get(`${API_URL}/events/${id}`);
+  return response.data;
+};
