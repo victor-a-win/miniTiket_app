@@ -22,3 +22,20 @@ export interface EventFormModalProps {
   existingEvent?: Event | null;
   onSuccess: (event: Event) => void;
 }
+
+export interface Attendee {
+  id: string;
+  quantity: number;
+  total_amount: number;
+  user: {
+    first_name: string;
+    last_name: string;
+  };
+}
+
+export interface StatisticsData {
+  period: string;
+  event_count: number;
+  tickets_sold: number;
+  total_revenue: number;
+}
