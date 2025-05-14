@@ -6,6 +6,7 @@ import ProfilePictureUpload from "@/components/profile/profilepictureupload";
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hook";
 import { fetchUser, logout } from "@/lib/redux/features/authSlice";
 import { persistor } from "@/lib/redux/store";
+import { IUser } from "@/interfaces/user.interface";
 
 export default function Profile() {
     const dispatch = useAppDispatch();
@@ -13,8 +14,13 @@ export default function Profile() {
         ...state.auth,
         user: {
             ...state.auth.user,
-            discount_coupons: Array.isArray(state.auth.user?.discount_coupons) ? state.auth.user.discount_coupons : [],
-        },
+            discount_coupons: Array.isArray(state.auth.user?.discount_coupons)
+                ? state.auth.user.discount_coupons 
+                : [],
+            PointTransactions: Array.isArray(state.auth.user?.PointTransactions)
+                ? state.auth.user.PointTransactions
+                : [],
+        } as IUser,
     }));
 
     useEffect(() => {
@@ -22,7 +28,7 @@ export default function Profile() {
             try {
                 await dispatch(fetchUser());
                  // Force persist to storage
-                persistor.persist();
+                await persistor.flush();
             } catch (err) {
                 // Handle token expiration
                 dispatch(logout());
@@ -30,8 +36,11 @@ export default function Profile() {
             }
         };
 
-        if (status === 'idle') loadProfile();
-    }, [dispatch, status, user]);
+        // Load profile when component mounts or user changes
+         if (!user?.PointTransactions || status === 'idle') {
+            loadProfile();
+        }
+    }, [dispatch, status, user?.PointTransactions]); // Add PointTransactions to dependencies
 
     if (!user) {
         return <div>Error loading profile</div>;
@@ -83,15 +92,27 @@ export default function Profile() {
                                 <p className="mt-1 text-sm text-gray-900">
                                     {user?.user_points?.toLocaleString() || "0"} points
                                 </p>
+                                <div className="mt-2 space-y-1">
+                                     {user?.PointTransactions?.filter(t => !t.is_expired).map(transaction => (
+                                        <div key={transaction.id} className="text-xs text-gray-500">
+                                            {transaction.amount.toLocaleString()} points expiring{" "} 
+                                            {new Date(transaction.expiry_date).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric'
+                                            })}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700"
                                     > Active Discount
                                 </label>
-                                    {user?.discount_coupons?.length > 0 ? (
+                                    {user?.discount_coupons && user.discount_coupons.length > 0 ? (
                                         <div className="mt-1 text-sm text-gray-900">
                                             <ul>
-                                                {user.discount_coupons.map((coupon, index) => (
+                                                {(user.discount_coupons ?? []).map((coupon, index) => (
                                                     <li key={index}>
                                                         <strong>{coupon.name}</strong>: {coupon.description} - {coupon.discount_percentage}% off
                                                     </li>

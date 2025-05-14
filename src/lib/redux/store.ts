@@ -8,9 +8,10 @@ const persistConfig = {
   key: "root",
   storage,
   whitelist: ["auth"], // Only persist auth state
-  version: 1,
+  version: 2, // Increment version
   migrate: (state: any) => {
-    if (state && state._persist.version !== 1) {
+    // Handle version changes
+     if (!state || !state._persist || state._persist.version !== 2) {
       return Promise.resolve(undefined);
     }
     return Promise.resolve(state);

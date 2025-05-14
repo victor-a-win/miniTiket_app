@@ -77,8 +77,9 @@ export const authSlice = createSlice({
         state.user = {
             ...action.payload,
         // Preserve the token if it's not coming from the API
+         PointTransactions: action.payload.PointTransactions || [],
         token: state.user?.token || action.payload.token
-    };
+        };
         state.isLogin = true;
       })
       .addCase(fetchUser.rejected, (state) => {
