@@ -28,13 +28,16 @@ export default function TransactionManagement() {
 
   const updateStatus = async (transactionId: string, status: 'done' | 'rejected') => {
     try {
+      const reason = status === 'rejected' 
+      ? prompt("Please enter the reason for rejection:") 
+      : undefined;
+
       const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/transactions/${transactionId}/status`,
         { status },
         { withCredentials: true }
       );
       if (response.status !== 200) throw new Error('Failed to update status');
-      await fetchTransactions(); // Refresh list
       await fetchTransactions(); // Refresh list
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update status');
