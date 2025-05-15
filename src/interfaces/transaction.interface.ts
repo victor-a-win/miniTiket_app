@@ -18,18 +18,17 @@ export interface TransactionPayload {
 
 export interface Transaction {
   id: string;
-  status: TransactionStatus;
-  total_amount: number;
-  payment_method: string;
-  user_id: number;
-  event_id: string;
-  doku_payment_id?: string;
-  doku_invoice?: string;
-  doku_payment_url?: string;
-  created_at: string;
-  expired_at?: string;
+  status: string;
   quantity: number;
+  total_amount: number;
+  created_at: string;
+  payment_proof: string | null;
+  payment_method: string;
+  event_id: string;
+  event: { name: string };
+  user_id: number;
+  user: { first_name: string; last_name: string; email: string };
   payment_date?: string;
-  event?: Event;
-};
+  expired_at?: string;
+}
 

@@ -2,14 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { StatisticsData } from '@/interfaces/event.interface';
 import axios from 'axios';
-
-interface StatisticsData {
-  period: string;
-  event_count: number;
-  tickets_sold: number;
-  total_revenue: number;
-}
 
 export default function SimpleBarChart() {
   const [data, setData] = useState<StatisticsData[]>([]);
